@@ -9,6 +9,13 @@
     <Import_RootNamespace>KatKits</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BytesAndBitOpeations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CRC.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Crypt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enumerate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EnumName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileSys.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Net.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Text2.cs" />
   </ItemGroup>
 </Project>
