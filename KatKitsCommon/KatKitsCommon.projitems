@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EnumName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileSys.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Process.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text2.cs" />
   </ItemGroup>
 </Project>
