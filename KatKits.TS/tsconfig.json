@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "allowJs": false,
+    "removeComments": true,
+    "declaration": true,
+    "target": "es6",
+    "lib": [ "es6", "dom" ],
+    "sourceMap": true,
+    "outDir": "./bin/lib"
+  },
+  "exclude": [
+    "node_modules",
+    "bin"
+  ]
+}

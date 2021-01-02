@@ -1,0 +1,17 @@
+{
+  "name": "katkits.ts",
+  "version": "0.0.1",
+  "description": "KatKits.TS",
+  "license": "MIT",
+  "author": {
+    "name": "ZoyuJ"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.14",
+    "typescript": "^3.2.2"
+  }
+}
