@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "None",
     "allowJs": false,
     "removeComments": true,
     "declaration": true,

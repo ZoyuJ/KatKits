@@ -3,11 +3,13 @@
   "version": "0.0.1",
   "description": "KatKits.TS",
   "license": "MIT",
+  "main": "KatKits.js",
+  "types": "KatKits.d.ts",
   "author": {
     "name": "ZoyuJ"
   },
   "scripts": {
-    "build": "tsc --build",
+    "build": "tsc --outFile ./bin/lib/KatKits.js",
     "clean": "tsc --build --clean"
   },
   "devDependencies": {
