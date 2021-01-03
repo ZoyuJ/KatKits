@@ -1,7 +1,4 @@
-/// <reference path="Index.ts" />
-
-
-namespace KatKits {
+export namespace KatKits {
 
   
   export const UTCToLocalDateTime = function (UTCDate: Date) {

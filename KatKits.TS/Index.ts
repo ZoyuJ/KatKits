@@ -1,4 +1,4 @@
-/// <reference path="Event.ts" />
-/// <reference path="Kits.ts" />
-declare namespace KatKits { }
+import { KatKits } from "./Kits";
+
+export default KatKits
 
