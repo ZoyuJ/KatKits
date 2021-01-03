@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "module": "UMD",
+    "module": "System",
     "allowJs": false,
     "removeComments": true,
     "declaration": true,
     "target": "es5",
     "lib": [ "es5", "dom" ],
     "sourceMap": true,
-    "outDir": "./bin"
+    "outDir": "./bin",
+    "outFile": "./bin/KatKits.js"
   },
   "exclude": [
     "node_modules",

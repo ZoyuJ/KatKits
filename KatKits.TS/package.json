@@ -9,7 +9,7 @@
     "name": "ZoyuJ"
   },
   "scripts": {
-    "build": "tsc --build",
+    "build": "tsc --outFile ./bin/KatKits.js",
     "clean": "tsc --build --clean"
   },
   "devDependencies": {

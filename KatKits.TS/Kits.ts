@@ -1,4 +1,4 @@
-export namespace KatKits {
+namespace KatKits {
 
   
   export const UTCToLocalDateTime = function (UTCDate: Date) {

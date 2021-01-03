@@ -1,4 +1,4 @@
-export namespace KatKits {
+namespace KatKits {
   export type Action0 = () => void;
   export type Action1<T1> = (Arg1: T1) => void;
   export type Action2<T1, T2> = (Arg1: T1, Arg2: T2) => void;

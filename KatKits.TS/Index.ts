@@ -1,4 +1,2 @@
-import { KatKits } from "./Kits";
 
-export default KatKits
-
+declare namespace KatKits { }
