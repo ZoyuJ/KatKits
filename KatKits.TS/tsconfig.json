@@ -4,10 +4,11 @@
     "allowJs": false,
     "removeComments": true,
     "declaration": true,
-    "target": "es6",
-    "lib": [ "es6", "dom" ],
+    "target": "es5",
+    "lib": [ "es5", "dom" ],
     "sourceMap": true,
-    "outDir": "./bin/lib"
+    "outDir": "./bin/lib",
+    "outFile": "./bin/lib/KatKits.js"
   },
   "exclude": [
     "node_modules",
