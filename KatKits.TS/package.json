@@ -1,15 +1,15 @@
 {
-  "name": "katkits.ts",
+  "name": "katkits",
   "version": "0.0.1",
   "description": "KatKits.TS",
   "license": "MIT",
-  "main": "KatKits.js",
-  "types": "KatKits.d.ts",
+  "main": "main.js",
+  "types": "main.d.ts",
   "author": {
     "name": "ZoyuJ"
   },
   "scripts": {
-    "build": "tsc --outFile ./bin/KatKits.js",
+    "build": "tsc --build",
     "clean": "tsc --build --clean"
   },
   "devDependencies": {

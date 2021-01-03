@@ -26,10 +26,10 @@
     <TypeScriptCompile Include="Event.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Index.ts">
+    <TypeScriptCompile Include="Kits.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Kits.ts">
+    <TypeScriptCompile Include="main.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
