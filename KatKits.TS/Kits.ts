@@ -103,3 +103,11 @@ export const IndexOfNumberString = function (Str: string, Index: number) {
       : Index > Str.length ? "0"
         : Str[Index];
 }
+
+export const RemoveBreaks = function (OldString: string) {
+  return OldString.replace(/(\r\n|\n|\r)/gm, "");
+}
+
+export const RemoveBreaksAndWriteSpaceBehind = function (OldString: string) {
+  return OldString.replace(/(\r\n|\n|\r)\ */gm, "");
+}
