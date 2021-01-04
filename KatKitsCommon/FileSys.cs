@@ -266,6 +266,18 @@
       return Name;
     }
     /// <summary>
+    /// 目录中随机唯一目录名
+    /// </summary>
+    /// <param name="Directory"></param>
+    /// <returns></returns>
+    public static string RandomUniqueDirName(in string Directory) {
+      var Name = Path.GetRandomFileName();
+      while (System.IO.Directory.Exists(Path.Combine(Directory, Name))) {
+        Name = Path.GetRandomFileName();
+      }
+      return Name;
+    }
+    /// <summary>
     /// 目录中随机唯一文件名
     /// </summary>
     /// <param name="Directory"></param>
@@ -273,6 +285,14 @@
     /// <returns></returns>
     public static string RandomUniqueFileName(in DirectoryInfo Directory, in string ExtName) {
       return RandomUniqueFileName(Directory.FullName, ExtName);
+    }
+    /// <summary>
+    /// 目录中随机唯一目录名
+    /// </summary>
+    /// <param name="Directory"></param>
+    /// <returns></returns>
+    public static string RandomUniqueDirName(in DirectoryInfo Directory) {
+      return RandomUniqueDirName(Directory.FullName);
     }
 
   }
