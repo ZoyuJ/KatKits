@@ -1,7 +1,9 @@
 ﻿namespace KatKits {
   using System;
+  using System.Collections;
   using System.Collections.Generic;
   using System.IO;
+  using System.Linq;
   using System.Text;
   using System.Threading.Tasks;
 
@@ -295,5 +297,198 @@
       return RandomUniqueDirName(Directory.FullName);
     }
 
+    /// <summary>
+    /// 收集文件分片
+    /// </summary>
+    public class SlicedFileServ {
+      public SlicedFileServ(LocalStoragerCfg Cfg) {
+        _Cfg = Cfg;
+        if (!Directory.Exists(Cfg.SlicedFileTempStorage)) Directory.CreateDirectory(Cfg.SlicedFileTempStorage);
+      }
+      public class LocalStoragerCfg {
+        public string SlicedFileTempStorage { get; set; }
+      }
+      public readonly LocalStoragerCfg _Cfg;
+
+      public void CreateUploadCacheDir(string Name) {
+        var DirP = Path.Combine(_Cfg.SlicedFileTempStorage, Name);
+        if (!Directory.Exists(DirP))
+          Directory.CreateDirectory(DirP);
+      }
+
+      /// <summary>
+      /// init prealloc file on disk
+      /// </summary>
+      /// <param name="CacheDirName"></param>
+      /// <param name="FileName">origin file name</param>
+      /// <param name="Size">origin file size (byte)</param>
+      /// <param name="Parts">how many parts</param>
+      /// <returns>file path</returns>
+      public string CreateFileCache(string CacheDirName, string FileName, long Size, int Parts) {
+        var CFP = Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName + CacheIntegExten);
+        var Fs = File.Create(CFP);
+        InitCachedMapAndSize(Fs, Size, Parts);
+        Fs.Close();
+        return CFP.EndsWith(CacheIntegExten) ? CFP.Substring(0, CFP.Length - CacheIntegExten.Length) : CFP;
+      }
+      /// <summary>
+      /// read cache map details from file
+      /// </summary>
+      /// <param name="Fs"></param>
+      /// <param name="Map">cache map</param>
+      /// <returns>how many parts</returns>
+      private int ReadCachedMap(FileStream Fs, out BitArray Map) {
+        Fs.Seek(-4, SeekOrigin.End);
+        var BLts = new byte[4];
+        Fs.Read(BLts, 0, 4);
+        var Rawlen = Convert.ToInt32(KatKits.Byte4ToInt32FromByteArray(BLts, 0));
+        var L = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(Rawlen) / 8.0));
+        BLts = new byte[L];
+        Fs.Seek(-L, SeekOrigin.End);
+        Fs.Read(BLts, 0, L);
+        Map = new BitArray(BLts);
+        Fs.Seek(0, SeekOrigin.Begin);
+        return Rawlen;
+      }
+      /// <summary>
+      /// init a file cache map , prealloc file size on disk,at last write inited cache map details in file
+      /// </summary>
+      /// <param name="Fs"></param>
+      /// <param name="RawFileSize"></param>
+      /// <param name="PartCount"></param>
+      private void InitCachedMapAndSize(FileStream Fs, long RawFileSize, int PartCount) {
+        var MapL = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(PartCount) / 8.0)) * 8;
+        var Map = new BitArray(MapL);
+        Map.SetAll(false);
+        Fs.SetLength(RawFileSize + Convert.ToInt64((MapL / 8) + 4));
+        WriteCachedMap(Fs, Map, PartCount);
+      }
+      /// <summary>
+      /// write file cache map
+      /// </summary>
+      /// <param name="Fs"></param>
+      /// <param name="Map">Cache map</param>
+      /// <param name="RawMapLength">how many parts</param>
+      /// <returns>Byte Count:Whold length of bytes need write to stream which include CacheMap details</returns>
+      private int WriteCachedMap(FileStream Fs, in BitArray Map, int RawMapLength) {
+        var NormaledMapLen = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(RawMapLength) / 8.0));
+        var WritedBts = new byte[4 + NormaledMapLen];
+        KatKits.Int32ToByte4InByteArray(RawMapLength, WritedBts, WritedBts.Length - 4);
+        Map.CopyTo(WritedBts, 4);
+        Fs.Seek(-WritedBts.Length, SeekOrigin.End);
+        Fs.Write(WritedBts, 0, WritedBts.Length);
+        return WritedBts.Length;
+      }
+      public const string CacheIntegExten = ".integing";
+      /// <summary>
+      /// write file part to cache file
+      /// </summary>
+      /// <param name="CacheDirName"></param>
+      /// <param name="FileName"></param>
+      /// <param name="Source"></param>
+      /// <param name="Offset">write start at</param>
+      /// <param name="PartIndex">which part this is</param>
+      /// <returns></returns>
+      public void WriteFileCache(string CacheDirName, string FileName, Stream Source, long Offset, int PartIndex) {
+        var CFP = Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName.EndsWith(CacheIntegExten) ? FileName : FileName + CacheIntegExten);
+        var sw = File.Open(CFP, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+        var MapL = ReadCachedMap(sw, out var Map);
+        if (PartIndex >= MapL) throw new IndexOutOfRangeException($"Caching File Block Doesnt Have This Area {PartIndex}/{MapL}");
+        Map[PartIndex] = true;
+        var CacheMapOffset = WriteCachedMap(sw, Map, MapL);
+        sw.Seek(Offset, SeekOrigin.Begin);
+        Source.CopyTo(sw);
+        bool Done = false;
+        if (Map.Cast<bool>().Take(MapL).Where(E => !E).Count() == 0) {
+          sw.Seek(0, SeekOrigin.Begin);
+          Done = true;
+          sw.SetLength(sw.Length - CacheMapOffset);
+        }
+        sw.Close();
+        if (Done) {
+          File.Move(CFP, Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName.EndsWith(CacheIntegExten) ? Path.GetFileNameWithoutExtension(FileName) : FileName));
+        }
+      }
+      /// <summary>
+      /// read file from file
+      /// </summary>
+      /// <param name="CacheDirName"></param>
+      /// <param name="FileName"></param>
+      /// <param name="Map"></param>
+      /// <param name="MapLength">length of map</param>
+      /// <param name="MapDetailLen">how many bytes at the end of file include slice details</param>
+      /// <returns></returns>
+      public Stream ReadFileCache(string CacheDirName, string FileName, out BitArray Map, out int MapLength, out int MapDetailLen) {
+        var FP = Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName.EndsWith(CacheIntegExten) ? FileName : FileName + CacheIntegExten);
+        if (File.Exists(FP)) {
+          var Fs = File.OpenRead(FP);
+          var RawMapL = ReadCachedMap(Fs, out Map);
+          MapDetailLen = 4 + Convert.ToInt32(Math.Ceiling(Convert.ToDouble(RawMapL) / 8.0));
+          Fs.Seek(0, SeekOrigin.Begin);
+          MapLength = RawMapL;
+          return Fs;
+        }
+        else {
+          FP = Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName);
+          var Fs = File.OpenRead(FP);
+          Map = null;
+          MapLength = -1;
+          MapDetailLen = -1;
+          return Fs;
+        }
+      }
+      public Stream ReadFileCache(string Path, out BitArray Map, out int MapLength, out int MapDetailLen) {
+        return ReadFileCache(System.IO.Path.GetDirectoryName(Path), System.IO.Path.GetFileName(Path), out Map, out MapLength, out MapDetailLen);
+      }
+      /// <summary>
+      /// check is file complet
+      /// </summary>
+      /// <param name="CacheDirName"></param>
+      /// <param name="FileName"></param>
+      /// <param name="Map"></param>
+      /// <returns>if -1 :has no cache map details;else length of parts</returns>
+      public int FileCacheIntegrity(string CacheDirName, string FileName, out BitArray Map) {
+        var IntF = Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName + CacheIntegExten);
+        if (File.Exists(IntF)) {
+          var Fs = File.OpenRead(IntF);
+          return ReadCachedMap(Fs, out Map);
+        }
+        Map = null;
+        return -1;
+      }
+      /// <summary>
+      /// delete cache file
+      /// </summary>
+      /// <param name="CacheDirName"></param>
+      /// <param name="FileName"></param>
+      public void DiscardCachedFile(string CacheDirName, string FileName) {
+        try {
+          File.Delete(Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName + CacheIntegExten));
+          File.Delete(Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName));
+        }
+        catch (FileNotFoundException) { }
+        catch (DirectoryNotFoundException) { }
+        finally {
+          try {
+            File.Delete(Path.Combine(_Cfg.SlicedFileTempStorage, CacheDirName, FileName));
+          }
+          catch (FileNotFoundException) { }
+          catch (DirectoryNotFoundException) { }
+        }
+      }
+      /// <summary>
+      /// delete cache dir
+      /// </summary>
+      /// <param name="Name"></param>
+      public void DiscardCacheDir(string Name) {
+        var DirP = Path.Combine(_Cfg.SlicedFileTempStorage, Name);
+        if (Directory.Exists(DirP)) Directory.Delete(DirP, true);
+      }
+
+    }
+
   }
+
+
+
 }
