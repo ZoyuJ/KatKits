@@ -10,7 +10,7 @@ export const UTCToLocalDateTime = function (UTCDate: Date) {
  */
 export const FormateDate = function (CurrentDate: Date, Formate: string) {
   let Result = "";
-  let C: string = null;
+  let C: string|null = null;
   let CI = 0;
   for (let i = Formate.length - 1; i >= 0; i--) {
     switch (Formate[i]) {
