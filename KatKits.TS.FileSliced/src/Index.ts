@@ -1,9 +1,9 @@
 
+import { AsyncAction2 } from "./../node_modules/katkits.ts/lib/Event"
+export default class FileUpLoader{
 
-export default class FileUpLoader extends Array<File>{
-
-  constructor() {
-    super();
+  constructor(Files:FileItem[]) {
+    
   }
 
 
@@ -14,9 +14,14 @@ export default class FileUpLoader extends Array<File>{
   public async Upload(): Promise<void> {
 
   }
-
+  /*
+      Slice(blob),PartSize,TotalSize,PartIndex,PartCount
+   */
 }
-
-//export interface FileElement extends File, Navi.ICommandCtrl {
-//  InputName?: string | null;
-//}
+/**
+ * 
+ * */
+export interface FileItem extends File {
+  InputName?: string | null;
+  
+}
