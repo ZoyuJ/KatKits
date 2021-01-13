@@ -329,7 +329,7 @@
         var Fs = File.Create(CFP);
         InitCachedMapAndSize(Fs, Size, Parts);
         Fs.Close();
-        return CFP.EndsWith(CacheIntegExten) ? CFP.Substring(0, CFP.Length - CacheIntegExten.Length) : CFP;
+        return Path.Combine(CacheDirName, FileName);
       }
       /// <summary>
       /// read cache map details from file
@@ -344,7 +344,7 @@
         var Rawlen = Convert.ToInt32(KatKits.Byte4ToInt32FromByteArray(BLts, 0));
         var L = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(Rawlen) / 8.0));
         BLts = new byte[L];
-        Fs.Seek(-L, SeekOrigin.End);
+        Fs.Seek(-(L + 4), SeekOrigin.End);
         Fs.Read(BLts, 0, L);
         Map = new BitArray(BLts);
         Fs.Seek(0, SeekOrigin.Begin);
@@ -374,7 +374,7 @@
         var NormaledMapLen = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(RawMapLength) / 8.0));
         var WritedBts = new byte[4 + NormaledMapLen];
         KatKits.Int32ToByte4InByteArray(RawMapLength, WritedBts, WritedBts.Length - 4);
-        Map.CopyTo(WritedBts, 4);
+        Map.CopyTo(WritedBts, 0);
         Fs.Seek(-WritedBts.Length, SeekOrigin.End);
         Fs.Write(WritedBts, 0, WritedBts.Length);
         return WritedBts.Length;
@@ -401,8 +401,8 @@
         bool Done = false;
         if (Map.Cast<bool>().Take(MapL).Where(E => !E).Count() == 0) {
           sw.Seek(0, SeekOrigin.Begin);
-          Done = true;
           sw.SetLength(sw.Length - CacheMapOffset);
+          Done = true;
         }
         sw.Close();
         if (Done) {
@@ -439,6 +439,9 @@
       }
       public Stream ReadFileCache(string Path, out BitArray Map, out int MapLength, out int MapDetailLen) {
         return ReadFileCache(System.IO.Path.GetDirectoryName(Path), System.IO.Path.GetFileName(Path), out Map, out MapLength, out MapDetailLen);
+      }
+      public string GetFileCachePath(string Path) {
+        return System.IO.Path.Combine(_Cfg.SlicedFileTempStorage, System.IO.Path.GetDirectoryName(Path), System.IO.Path.GetFileName(Path));
       }
       /// <summary>
       /// check is file complet
