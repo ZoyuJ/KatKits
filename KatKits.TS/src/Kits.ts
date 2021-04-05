@@ -6,11 +6,11 @@ export const UTCToLocalDateTime = function (UTCDate: Date) {
 /**
  * formate datetime toString like C#(but not look like).
  * @param CurrentDate JS Date
- * @param Formate yÄê,MÔÂ,dÈÕ,H:Ê±(24),h:Ê±(12),m:·Ö,s:Ãë,z:Ê±Çø(GMT¡ÀNN:00),°´¶ÔÓ¦Êý×Ö´ÓºóÏòÇ°Ìæ»»¶ÔÓ¦×ÖÄ¸£¬¶àÓàµÄ×ÖÄ¸ÓÉ0²¹Æë£¬ÆäËû×Ö·ûÔ­ÑùÊä³ö,Ê±Çø½öÖ§³ÖÒ»¸ö×ÖÄ¸z,Ê¹ÓÃÊ±ÇøÕû¸öÌæ»»×ÖÄ¸z£¬12Ð¡Ê±Öµ½«ÔÚh²¿·ÖºóÌí¼Ó' AM'»ò¡® PM¡¯;
+ * @param Formate yå¹´,Mæœˆ,dæ—¥,H:æ—¶(24),h:æ—¶(12),m:åˆ†,s:ç§’,z:æ—¶åŒº(GMTÂ±NN:00),æŒ‰å¯¹åº”æ•°å­—ä»ŽåŽå‘å‰æ›¿æ¢å¯¹åº”å­—æ¯ï¼Œå¤šä½™çš„å­—æ¯ç”±0è¡¥é½ï¼Œå…¶ä»–å­—ç¬¦åŽŸæ ·è¾“å‡º,æ—¶åŒºä»…æ”¯æŒä¸€ä¸ªå­—æ¯z,ä½¿ç”¨æ—¶åŒºæ•´ä¸ªæ›¿æ¢å­—æ¯zï¼Œ12å°æ—¶å€¼å°†åœ¨héƒ¨åˆ†åŽæ·»åŠ ' AM'æˆ–â€˜ PMâ€™;
  */
 export const FormateDate = function (CurrentDate: Date, Formate: string) {
   let Result = "";
-  let C: string|null = null;
+  let C: string | null = null;
   let CI = 0;
   for (let i = Formate.length - 1; i >= 0; i--) {
     switch (Formate[i]) {
@@ -111,3 +111,18 @@ export const RemoveBreaks = function (OldString: string) {
 export const RemoveBreaksAndWriteSpaceBehind = function (OldString: string) {
   return OldString.replace(/(\r\n|\n|\r)\ */gm, "");
 }
+
+export const Insert = function <T>(Source: Array<T>, Index: number, Value: T) {
+  Source.splice(Index, 0, Value);
+}
+
+export const InsertChar = function (Source: string, Index: number, Value: string): string {
+  return Source.slice(0, Index) + Value + Source.slice(Index);
+}
+
+export const Index = function () {
+  if (!String.prototype.splice) {
+    String.prototype.splice = InsertChar;
+  }
+}
+

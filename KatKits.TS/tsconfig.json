@@ -9,7 +9,7 @@
     "outDir": "./lib",
     "strict": true,
     "declaration": true,
-    "lib": [ "ES2015","DOM" ]
+    "lib": [ "ES2015" ]
   },
   "include": [
     "src"

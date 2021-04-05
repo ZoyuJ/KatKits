@@ -20,7 +20,6 @@
     <Content Include=".npmignore">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="tsconfig.json">
       <SubType>Code</SubType>
@@ -31,9 +30,6 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\Event.ts" />
-    <TypeScriptCompile Include="src\Index.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="src\Kits.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
