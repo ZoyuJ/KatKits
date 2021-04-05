@@ -1,5 +1,5 @@
 
-import { AsyncAction2 } from "./../node_modules/katkits.ts/lib/Event"
+
 export default class FileUpLoader{
 
   constructor(Files:FileItem[]) {

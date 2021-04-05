@@ -2,7 +2,6 @@
   "name": "katkits.ts.filesliced",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,6 +12,6 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "katkits.ts": "2.1.0"
+    "katkits.ts": "3.0.1"
   }
 }
