@@ -1,10 +1,16 @@
 {
-  "name": "katkits.ts",
-  "version": "3.0.2",
+  "name": "katkits",
+  "version": "2.0.1",
   "description": "",
   "scripts": {
     "build": "tsc"
   },
+  "files": [
+    "bin/**/*.js",
+    "bin/**/*.js.map",
+    "bin/**/*.d.ts",
+    "bin/**/*.ts"
+  ],
   "keywords": [],
   "author": "ZoyuJ",
   "license": "MIT",

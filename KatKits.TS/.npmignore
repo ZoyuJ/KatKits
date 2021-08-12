@@ -1,5 +1,5 @@
-/bin
 /obj
+/lib
 _*.*
 *.njsproj
 *.njsproj*
@@ -7,4 +7,5 @@ _*.*
 *.zip
 *.tar
 *.tgz
+*.dll
 package-lock.json

@@ -16,6 +16,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		KatKitsCommon\KatKitsCommon.projitems*{4d582cf4-0cba-4052-880d-4e5508fc9e1c}*SharedItemsImports = 13
+		KatKitsCommon\KatKitsCommon.projitems*{87728733-7510-4f45-8108-50091ea4de3b}*SharedItemsImports = 4
 		KatKitsCommon\KatKitsCommon.projitems*{fef6d0c4-0a6e-4a9f-af7a-6d38ad5e5ef0}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
