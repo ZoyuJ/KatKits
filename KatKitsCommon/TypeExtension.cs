@@ -72,5 +72,22 @@
           .OfType<PropertyInfo>()
           .Where(E => E.GetIndexParameters().Select(P => P.ParameterType).Append(E.PropertyType).OrderedEqual(ParameterAndReturnTypes));
 
+    public static object ConvertToDataType(string Text, Type Target)
+    {
+      if (string.IsNullOrEmpty(Text)) return Text;
+      if (Target.Equals(typeof(string))) return Text;
+      if (Target.IsNullableType()) Target = Nullable.GetUnderlyingType(Target);
+      if (Target.IsBasicDataType())
+      {
+        if (Target.IsPrimitive) return Convert.ChangeType(Text, Target);
+        else if (Target.Equals(typeof(decimal))) return decimal.Parse(Text);
+        else if (Target.Equals(typeof(DateTime))) return DateTime.Parse(Text);
+        else if (Target.Equals(typeof(TimeSpan))) return TimeSpan.Parse(Text);
+        else if (Target.Equals(typeof(Guid))) return Guid.Parse(Text);
+        else if (Target.Equals(typeof(DateTimeOffset))) return DateTimeOffset.Parse(Text);
+      }
+      throw new InvalidCastException($"cant convert string to {Target.Name}, basic data type(or nullable) Only");
+    }
+
   }
 }
