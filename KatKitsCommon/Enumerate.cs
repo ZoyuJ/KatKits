@@ -191,12 +191,11 @@
       return AllRes.Value;
     }
 
-    public static bool OrderedEqual<T>(this IEnumerable<T> This,IEnumerable<T> Others,int SourceOffset = 0,int OthersOffset = 0,int Length = 0,bool MatchLength = true)
-    {
+    public static bool OrderedEqual<T>(this IEnumerable<T> This, IEnumerable<T> Others, int SourceOffset = 0, int OthersOffset = 0, int Length = 0, bool MatchLength = true) {
       var _Source = Length == 0 ? This.Skip(SourceOffset) : This.Skip(SourceOffset).Take(Length);
       var _Other = Length == 0 ? Others.Skip(OthersOffset) : Others.Skip(SourceOffset).Take(Length);
       if (MatchLength && _Source.Count() != _Other.Count()) return false;
-      return _Source.Zip(_Other, (L, R) => L.Equals(R)).Any(E => false);
+      return !_Source.Zip(_Other, (L, R) => L.Equals(R)).Any(E => E == false);
     }
 
     public static IEnumerable<uint> ReverseUIntRange(uint Start, uint Length) {

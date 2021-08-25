@@ -18,7 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)FileSys.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LinqExpressionExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Net.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Process.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SQLParametersExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TypeExtension.cs" />

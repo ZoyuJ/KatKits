@@ -1,5 +1,4 @@
-﻿namespace KatKits
-{
+﻿namespace KatKits {
   using System;
   using System.Collections;
   using System.Collections.Generic;
@@ -12,8 +11,7 @@
   using System.Reflection;
 
   [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-  public class ColumnMapAttribute : Attribute
-  {
+  public class ColumnMapAttribute : Attribute {
     /// <summary>
     /// if the xls sheet has headers
     /// </summary>
@@ -47,8 +45,7 @@
     [Obsolete("use Kits.FetchPropertiesAndAttributes instead", true)]
     public static IEnumerable<ColumnMapAttribute> FromModel<T>() => FromModel(typeof(T));
     [Obsolete("use Kits.FetchPropertiesAndAttributes instead", true)]
-    public static IEnumerable<ColumnMapAttribute> FromModel(Type ModelType)
-    {
+    public static IEnumerable<ColumnMapAttribute> FromModel(Type ModelType) {
 
       return ModelType.GetProperties()
         .Select(E => new { Property = E, Attribute = E.GetCustomAttributes(typeof(ColumnMapAttribute), false).Cast<ColumnMapAttribute>().FirstOrDefault() })
@@ -60,8 +57,7 @@
                 || E.Property.PropertyType.Equals(typeof(DateTime))
                 )
         .OrderBy(E => E.Attribute.TableColumnOrder)
-        .Select(E =>
-        {
+        .Select(E => {
           E.Attribute.DefaultValue = E.Attribute.DefaultValue ?? E.Property.GetCustomAttributes(typeof(DefaultValueAttribute), false).Cast<DefaultValueAttribute>().FirstOrDefault()?.Value ?? E.Attribute.DefaultValue;
           E.Attribute.PropertyType = E.Property.PropertyType;
           E.Attribute.PropertyName = E.Property.Name;
@@ -71,12 +67,10 @@
     [Obsolete("use Kits.TypeToDataTable instead", true)]
     public static DataTable GenerateDataTable<T>() => GenerateDataTable(typeof(T));
     [Obsolete("use Kits.TypeToDataTable instead", true)]
-    public static DataTable GenerateDataTable(Type ModelType)
-    {
+    public static DataTable GenerateDataTable(Type ModelType) {
       var Table = new DataTable();
       var ColumnMap = FromModel(ModelType);
-      ColumnMap.ToArray().ForEach(E =>
-      {
+      ColumnMap.ToArray().ForEach(E => {
         var Col = Table.Columns.Add(E.TableColumnName ?? E.PropertyName, E.PropertyType);
         Col.AllowDBNull = E.AllowNull;
         Col.DefaultValue = E.DefaultValue;
@@ -106,10 +100,8 @@
     //}
   }
   //DataTable <-> IEnumerable<T>
-  public static partial class KatKits
-  {
-    internal class DataExchangeCacheEntity
-    {
+  public static partial class KatKits {
+    internal class DataExchangeCacheEntity {
       public IEnumerable<PropertyAndAttribute> Attributes;
       public Func<object, IDictionary<string, object>> Obj2Dict;
       public Func<Type, DataTable> Type2DataTable;
@@ -129,23 +121,19 @@
 
     internal static readonly Dictionary<Type, DataExchangeCacheEntity> DataExchangeEntities = new Dictionary<Type, DataExchangeCacheEntity>();
 
-    internal static IEnumerable<PropertyAndAttribute> FetchPropertiesAndAttributes(Type InputType)
-    {
-      IEnumerable<PropertyAndAttribute> Fetch()
-      {
+    internal static IEnumerable<PropertyAndAttribute> FetchPropertiesAndAttributes(Type InputType) {
+      IEnumerable<PropertyAndAttribute> Fetch() {
         return InputType.GetProperties(BindingFlags.Instance | BindingFlags.Public)
       .Select(E => new PropertyAndAttribute { Property = E, Attribute = E.GetCustomAttributes(typeof(ColumnMapAttribute), false).Cast<ColumnMapAttribute>().FirstOrDefault() })
       .Where(E => E.Property.CanWrite && E.Property.CanRead && E.Attribute != null)
       .Where(E => E.Property.PropertyType.IsBasicDataTypeOrNullable())
-      .Select(E =>
-      {
+      .Select(E => {
         E.Attribute.PropertyName = E.Property.Name;
         E.Attribute.TableColumnName = E.Attribute.TableColumnName ?? (E.Property.GetCustomAttribute<ColumnAttribute>()?.Name);
         if (E.Property.PropertyType.IsNullableType()) E.Attribute.AllowNull = true;
         E.Attribute.PropertyType = E.Property.PropertyType;
         E.Attribute.DefaultValue = E.Attribute.DefaultValue ?? (E.Property.GetCustomAttribute<DefaultValueAttribute>()?.Value) ?? E.Property.PropertyType.DefaultBasicDataTypeValue();
-        if (E.Property.PropertyType.IsEnum)
-        {
+        if (E.Property.PropertyType.IsEnum) {
 
         }
         return E;
@@ -153,24 +141,20 @@
       .OrderBy(E => E.Attribute.TableColumnOrder);
       }
       if (InputType == null) return null;
-      else
-      {
+      else {
         DataExchangeCacheEntity Funct = null;
-        if (!DataExchangeEntities.TryGetValue(InputType, out Funct))
-        {
+        if (!DataExchangeEntities.TryGetValue(InputType, out Funct)) {
           Funct = new DataExchangeCacheEntity();
           DataExchangeEntities.Add(InputType, Funct);
         }
-        if (Funct.Obj2Dict == null)
-        {
+        if (Funct.Obj2Dict == null) {
           Funct.Attributes = Fetch();
         }
         return Funct.Attributes;
       }
 
     }
-    public class PropertyAndAttribute
-    {
+    public class PropertyAndAttribute {
       public PropertyInfo Property { get; set; }
       public ColumnMapAttribute Attribute { get; set; }
     }
@@ -181,10 +165,8 @@
     /// </summary>
     /// <param name="This"></param>
     /// <returns></returns>
-    public static IDictionary<string, object> ObjectToDictionary(this object This)
-    {
-      Func<object, IDictionary<string, object>> CreateFunction()
-      {
+    public static IDictionary<string, object> ObjectToDictionary(this object This) {
+      Func<object, IDictionary<string, object>> CreateFunction() {
         var OutputType = typeof(IDictionary<string, object>);
         var InputType = This.GetType();
         var InputExpression = Expression.Parameter(typeof(object), "input");
@@ -204,16 +186,13 @@
         return LambdaExpression.Compile();
       }
       if (This == null) return null;
-      else
-      {
+      else {
         DataExchangeCacheEntity Funct = null;
-        if (!DataExchangeEntities.TryGetValue(This.GetType(), out Funct))
-        {
+        if (!DataExchangeEntities.TryGetValue(This.GetType(), out Funct)) {
           Funct = new DataExchangeCacheEntity();
           DataExchangeEntities.Add(This.GetType(), Funct);
         }
-        if (Funct.Obj2Dict == null)
-        {
+        if (Funct.Obj2Dict == null) {
           Funct.Obj2Dict = CreateFunction();
         }
         return Funct.Obj2Dict(This);
@@ -231,12 +210,10 @@
     /// </summary>
     /// <param name="This"></param>
     /// <returns></returns>
-    public static DataTable TypeToDataTable(this Type This)
-    {
+    public static DataTable TypeToDataTable(this Type This) {
       if (This == null) return null;
       if (This.IsBasicDataType()) return null;
-      Func<Type, DataTable> CreateFunction()
-      {
+      Func<Type, DataTable> CreateFunction() {
         var InputType = This;
         var OutputType = typeof(DataTable);
         var InputExpression = Expression.Parameter(typeof(object), "input");
@@ -249,8 +226,7 @@
         var Col = Expression.Variable(typeof(DataColumn), "Col");
         Body.AddRange(
           FetchPropertiesAndAttributes(InputType)
-          .Select(E =>
-          {
+          .Select(E => {
             return Expression.Block(new ParameterExpression[] { Col },
               Expression.Assign(Col, Expression.Call(ColumnsVariable, AddColumnToDataTable, Expression.Constant(E.Attribute.TableColumnName ?? E.Property.Name), Expression.Constant(E.Property.PropertyType.IsNullableType() ? Nullable.GetUnderlyingType(E.Property.PropertyType) : E.Property.PropertyType))),
               Expression.Assign(Expression.Property(Col, ColumnAllowNull), Expression.Constant(E.Attribute.AllowNull)),
@@ -266,8 +242,7 @@
         return LambdaExpression.Compile();
       }
       DataExchangeCacheEntity Funct = null;
-      if (!DataExchangeEntities.TryGetValue(This, out Funct))
-      {
+      if (!DataExchangeEntities.TryGetValue(This, out Funct)) {
         Funct = new DataExchangeCacheEntity();
         DataExchangeEntities.Add(This, Funct);
       }
@@ -282,10 +257,8 @@
     /// <typeparam name="T"></typeparam>
     /// <param name="This"></param>
     /// <returns></returns>
-    public static DataTable EnumerableToDataTable<T>(this IEnumerable<T> This, DataTable Table = null) where T : new()
-    {
-      Func<DataTable, IEnumerable, DataTable> CreateFunction()
-      {
+    public static DataTable EnumerableToDataTable<T>(this IEnumerable<T> This, DataTable Table = null) where T : new() {
+      Func<DataTable, IEnumerable, DataTable> CreateFunction() {
         var OutputType = typeof(DataTable);
 
         var RowsProperty = typeof(DataTable).GetProperty(nameof(DataTable.Rows));
@@ -335,8 +308,7 @@
       if (Table == null) Table = TypeToDataTable<T>();
 
       DataExchangeCacheEntity Funct = null;
-      if (!DataExchangeEntities.TryGetValue(typeof(T), out Funct))
-      {
+      if (!DataExchangeEntities.TryGetValue(typeof(T), out Funct)) {
         Funct = new DataExchangeCacheEntity();
         DataExchangeEntities.Add(typeof(T), Funct);
       }
@@ -347,8 +319,7 @@
     }
 
     private readonly static Dictionary<Type, Func<IEnumerable, DataTable, DataTable>> GenericDataTableWriters = new Dictionary<Type, Func<IEnumerable, DataTable, DataTable>>();
-    public static DataTable GenericEnumerableToDataTable<T>(this IEnumerable<T> This, DataTable Table = null)where T:new()
-    {
+    public static DataTable GenericEnumerableToDataTable<T>(this IEnumerable<T> This, DataTable Table = null) where T : new() {
       var Items = This.ToArray();
       Table = Table ?? TypeToDataTable<T>();
 
@@ -427,110 +398,19 @@
     }
 
     private static readonly Dictionary<Type, Func<DataTable, IEnumerable>> DataTableToArrayConverters = new Dictionary<Type, Func<DataTable, IEnumerable>>();
-    /// <summary>
-    /// Read DataTable as IEnumerable<T>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="Table"></param>
-    /// <returns></returns>
-    public static IEnumerable<T> DataTableToIEnumerable<T>(this DataTable Table) where T : new()
-    {
-      Func<DataTable, IEnumerable> CreateFunction()
-      {
-        var InputType = typeof(DataTable);
-        var OutputType = typeof(List<T>);
-        var InputParaTable = Expression.Parameter(InputType, "Table");
-        var OutputVariable = Expression.Variable(OutputType, "output");
-        var RowsProperty = typeof(DataTable).GetProperty(nameof(DataTable.Rows));
-        var ReturnTarget = Expression.Label(OutputType);
-        var BreakLabel = Expression.Label(typeof(int));
-        var Vars = FetchPropertiesAndAttributes(typeof(T)).ToArray();
-        var LoopItem = Expression.Variable(typeof(object), "Row");
-        var Items = Expression.Variable(typeof(List<T>), "Items");
-        var Body = new List<Expression> {
-          Expression.Assign(Items,Expression.New(typeof(List<T>).GetConstructors().FirstOrDefault(E=>E.IsPublic && E.GetParameters().Length == 0))),
-          Expression.Assign(OutputVariable,Items)
-        };
-        var ModelConstructor = typeof(T).GetConstructors().FirstOrDefault(c => c.IsPublic && !c.GetParameters().Any());
 
-        var Item = Expression.Variable(typeof(T), "Item");
-
-#if FRAMEWORK
-        var _W = new Expression[] {
-                  Expression.Assign(Item,Expression.New(ModelConstructor)),
-                  Expression.Call(Items,typeof(List<T>).GetMethod("Add"),Item),
-                }
-               .Concat(Vars.Select(E =>
-                   Expression.Assign(
-                     Expression.Property(Item, E.Property),
-                     Expression.Convert(
-                       Expression.Call(null,
-                         typeof(DataRowExtensions).GetMethods().FirstOrDefault(M => M.IsGenericMethod && M.Name == nameof(DataRowExtensions.Field)).MakeGenericMethod(E.Property.PropertyType),
-                         Expression.Convert(LoopItem, typeof(DataRow)),
-                         Expression.Constant(E.Attribute.TableColumnName ?? E.Property.Name)
-                       ),
-                       E.Property.PropertyType
-                     )
-                   )
-                 )
-               ).ToArray(); 
-#elif STANDARD
-        var _W = new Expression[] {
-                  Expression.Assign(Item,Expression.New(ModelConstructor)),
-                  Expression.Call(Items,typeof(List<T>).GetMethod("Add"),Item),
-                }
-          .Concat(Vars.Select(E =>
-              Expression.Assign(
-                Expression.Property(Item, E.Property),
-                Expression.Convert(
-                  Expression.Property(
-                    Expression.Convert(LoopItem, typeof(DataRow)),
-                    typeof(DataRow).FindIndexers(typeof(string),typeof(object)).Single(),
-                    Expression.Constant(E.Attribute.TableColumnName ?? E.Property.Name)
-                  ),
-                  E.Property.PropertyType
-                )
-              )
-            )
-          ).ToArray();
-#endif
-
-        Body.Add(
-          ForEach(
-              Expression.Property(InputParaTable, RowsProperty),
-              LoopItem,
-              Expression.Block(_W)
-          )
-        );
-        Body.Add(Expression.Return(ReturnTarget, OutputVariable));
-        Body.Add(Expression.Label(ReturnTarget, Expression.Constant(null, OutputType)));
-        var LambdaExpression = Expression.Lambda<Func<DataTable, IEnumerable>>(
-               Expression.Block(new[] { OutputVariable, Items, Item }, Body),
-               InputParaTable);
-        return LambdaExpression.Compile();
-      }
-
-      DataExchangeCacheEntity Funct = null;
-      if (!DataExchangeEntities.TryGetValue(typeof(T), out Funct))
-      {
-        Funct = new DataExchangeCacheEntity();
-        DataExchangeEntities.Add(typeof(T), Funct);
-      }
-      if (Funct.DataTable2Enumerable == null)
-        Funct.DataTable2Enumerable = CreateFunction();
-      return Funct.DataTable2Enumerable(Table).Cast<T>();
-
-
+    private static T __EXPPREFIX_ConvertDataTaleFieldValue<T>(object Field) {
+      return Convert.IsDBNull(Field) ? default(T) : (T)Convert.ChangeType(Field, typeof(T).GetUnderlyingType());
     }
+
     /// <summary>
     /// yield return datatable row
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="Table"></param>
     /// <returns></returns>
-    public static IEnumerable<T> YieldTo<T>(this DataTable Table) where T : new()
-    {
-      return Table.Rows.Cast<DataRow>().YieldTo<T>();
+    public static IEnumerable<T> AsEnumerable<T>(this DataTable Table) where T : new() {
+      return Table.Rows.Cast<DataRow>().AsEnumerable<T>();
     }
     /// <summary>
     /// yield return datatable row
@@ -538,10 +418,8 @@
     /// <typeparam name="T"></typeparam>
     /// <param name="Rows"></param>
     /// <returns></returns>
-    public static IEnumerable<T> YieldTo<T>(this IEnumerable<DataRow> Rows)
-    {
-      Func<DataRow, object> DataTableYieldToObjectsCreateFunction()
-      {
+    public static IEnumerable<T> AsEnumerable<T>(this IEnumerable<DataRow> Rows) {
+      Func<DataRow, object> DataTableYieldToObjectsCreateFunction() {
         var InputType = typeof(DataRow);
         var OutputType = typeof(T);
         var InputPara = Expression.Parameter(InputType, "Row");
@@ -556,36 +434,22 @@
           Expression.Assign(Item,Expression.New(typeof(T).GetConstructors().FirstOrDefault(E=>E.IsPublic && E.GetParameters().Length == 0))),
           Expression.Assign(OutputVariable,Item)
         };
+
         Body.AddRange(
-#if FRAMEWORK
           Vars.Select(E =>
             Expression.Assign(
               Expression.Property(Item, E.Property),
-              Expression.Convert(
-                Expression.Call(null,
-                  typeof(DataRowExtensions).GetMethods().FirstOrDefault(M => M.IsGenericMethod && M.Name == nameof(DataRowExtensions.Field)).MakeGenericMethod(E.Property.PropertyType),
+              Expression.Call(
+                null,
+                typeof(KatKits).GetMethod(nameof(KatKits.__EXPPREFIX_ConvertDataTaleFieldValue), BindingFlags.Static | BindingFlags.NonPublic).MakeGenericMethod(E.Property.PropertyType),
+                Expression.Property(
                   Expression.Convert(InputPara, typeof(DataRow)),
+                  typeof(DataRow).FindIndexers("Item", typeof(string), typeof(object)).Single(),
                   Expression.Constant(E.Attribute.TableColumnName ?? E.Property.Name)
-                ),
-                E.Property.PropertyType
-              )
-            )
-          ) 
-#elif STANDARD
-          Vars.Select(E =>
-            Expression.Assign(
-              Expression.Property(Item, E.Property),
-              Expression.Convert(
-                  Expression.Property(
-                    Expression.Convert(InputPara, typeof(DataRow)),
-                    typeof(DataRow).FindIndexers(typeof(string), typeof(object)).Single(),
-                    Expression.Constant(E.Attribute.TableColumnName ?? E.Property.Name)
-                  ),
-                  E.Property.PropertyType
+                )
               )
             )
           )
-#endif
         );
         Body.Add(Expression.Return(ReturnTarget, OutputVariable));
         Body.Add(Expression.Label(ReturnTarget, Expression.Constant(null, OutputType)));
@@ -594,8 +458,7 @@
                InputPara);
         return LambdaExpression.Compile();
       }
-      if (!DataExchangeEntities.TryGetValue(typeof(T), out var Funct))
-      {
+      if (!DataExchangeEntities.TryGetValue(typeof(T), out var Funct)) {
         Funct = new DataExchangeCacheEntity();
         DataExchangeEntities.Add(typeof(T), Funct);
       }
@@ -604,7 +467,7 @@
       return Rows.Select(E => Funct.DataRow2Object(E)).Cast<T>();
     }
 
-    
+
   }
 
 }

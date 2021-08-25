@@ -1,5 +1,4 @@
-﻿namespace KatKits
-{
+﻿namespace KatKits {
   using System;
   using System.Collections.Generic;
   using System.Linq;
@@ -8,8 +7,7 @@
   using System.Text;
 
   //Type Check
-  public static partial class KatKits
-  {
+  public static partial class KatKits {
     //public static DataTable ExcelToDataTable(FileInfo ExcelFile, string isHDR = "Yes")
     //{
     //  string conStr = "";
@@ -44,6 +42,16 @@
     //  connExcel.Close();
     //  return dt;
     //}
+    public static Type GetUnderlyingType(this Type This) {
+      var Tp = This;
+      if (This.IsNullableType()) {
+        Tp = Nullable.GetUnderlyingType(This);
+      }
+      if (Tp.IsEnum) {
+        return Enum.GetUnderlyingType(Tp);
+      }
+      return Tp;
+    }
     public static bool IsBasicDataType(this Type This)
       => This == null
           ? false
@@ -63,6 +71,8 @@
     public static bool IsNullableType(this Type This) => Nullable.GetUnderlyingType(This) != null;
     public static bool IsBasicDataTypeOrNullable(this Type This) => IsBasicDataType(Nullable.GetUnderlyingType(This)) || IsBasicDataType(This);
     private static readonly Dictionary<Type, object> __DEFAULT_DATATYPE_VALUE = new Dictionary<Type, object>() {
+      { typeof(bool),false},
+      { typeof(bool?),new bool?()},
       { typeof(int),0},
       { typeof(int?),new int?() },
       { typeof(long),0L},
@@ -86,24 +96,27 @@
       { typeof(decimal),(decimal)0},
       { typeof(decimal?),new decimal?()},
       { typeof(string),null},
-      { typeof(DateTime),DateTime.UtcNow},
-      { typeof(DateTime?),new DateTime?()},
+      { typeof(DateTime),System.Data.SqlTypes.SqlDateTime.MinValue.Value},
+      { typeof(DateTime?),new DateTime?(System.Data.SqlTypes.SqlDateTime.MinValue.Value)},
       { typeof(TimeSpan),TimeSpan.Zero},
       { typeof(TimeSpan?),new TimeSpan?()},
-      { typeof(DateTimeOffset),DateTimeOffset.UtcNow},
+      { typeof(DateTimeOffset),new DateTimeOffset(System.Data.SqlTypes.SqlDateTime.MinValue.Value)},
       { typeof(DateTimeOffset?),new DateTimeOffset?()},
       { typeof(Guid),Guid.Empty},
       { typeof(Guid?),new Guid?()},
     };
-    public static object DefaultBasicDataTypeValue(this Type This)
-    {
+    public static object DefaultBasicDataTypeValue(this Type This) {
       return This.IsEnum ? Enum.ToObject(This, (int)(Enum.GetValues(This).GetValue(0))) : __DEFAULT_DATATYPE_VALUE[This];
     }
 
-    public static IEnumerable<PropertyInfo> FindIndexers(this Type This, params Type[] ParameterAndReturnTypes)
-      => This.GetDefaultMembers()
-          .OfType<PropertyInfo>()
-          .Where(E => E.GetIndexParameters().Select(P => P.ParameterType).Append(E.PropertyType).OrderedEqual(ParameterAndReturnTypes));
+    //public static IEnumerable<PropertyInfo> FindIndexers(this Type This, params Type[] ParameterAndReturnTypes)
+    //  => This.GetDefaultMembers()
+    //      .OfType<PropertyInfo>()
+    //      .Where(E => E.GetIndexParameters().Select(P => P.ParameterType).Append(E.PropertyType).OrderedEqual(ParameterAndReturnTypes));
+
+    public static IEnumerable<PropertyInfo> FindIndexers(this Type This, string IndexName = "Item", params Type[] ParameterAndReturnTypes)
+    => This.GetProperties()
+        .Where(E => E.Name == IndexName && E.GetIndexParameters().Select(P => P.ParameterType).Append(E.PropertyType).OrderedEqual(ParameterAndReturnTypes));
 
   }
 }
