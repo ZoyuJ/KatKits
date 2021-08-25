@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;STANDARD;</DefineConstants>
+    <DefineConstants>TRACE;STANDARD;DATATABLE_SUPPORT;ADO_SQLCLIENT;</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

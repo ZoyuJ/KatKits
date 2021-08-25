@@ -206,10 +206,6 @@ namespace KatKits
       }
 
     }
-    public class PropertyAndAttribute {
-      public PropertyInfo Property { get; set; }
-      public ColumnMapAttribute Attribute { get; set; }
-    }
 
 
     /// <summary>
