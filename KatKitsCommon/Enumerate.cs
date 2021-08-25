@@ -26,6 +26,21 @@
       }
     }
 
+    public static T GetLinkedListItem<T>(this LinkedList<T> This,int Index)
+    {
+      return This.Skip(Index).FirstOrDefault();
+    }
+    public static IEnumerable<LinkedListNode<T>> LinkedListItems<T>(this LinkedList<T> This)
+    {
+      var H = This.First;
+      while (H != null)
+      {
+        yield return H;
+        H = H.Next;
+      }
+      yield break;
+    }
+
     /// <summary>
     /// 自定义排序
     /// </summary>

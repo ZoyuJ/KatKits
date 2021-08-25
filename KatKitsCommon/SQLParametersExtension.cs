@@ -1,4 +1,5 @@
-﻿namespace KatKits
+﻿#if ADO_SQLCLIENT
+namespace KatKits
 {
   using System;
   using System.Collections.Generic;
@@ -157,3 +158,5 @@
 
   }
 }
+
+#endif

@@ -1,4 +1,7 @@
-﻿namespace KatKits {
+﻿#if ADO_SQLCLIENT
+#if DATATABLE_SUPPORT
+namespace KatKits
+{
   using System;
   using System.Collections;
   using System.Collections.Generic;
@@ -9,6 +12,8 @@
   using System.Linq;
   using System.Linq.Expressions;
   using System.Reflection;
+
+  using static global::KatKits.KatKits;
 
   [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
   public class ColumnMapAttribute : Attribute {
@@ -41,6 +46,47 @@
     /// ignore in attribute attaching
     /// </summary>
     public string PropertyName { get; internal set; }
+
+    internal static IEnumerable<PropertyAndAttribute> FetchPropertiesAndAttributes(Type InputType)
+    {
+      IEnumerable<PropertyAndAttribute> Fetch()
+      {
+        return InputType.GetProperties(BindingFlags.Instance | BindingFlags.Public)
+      .Select(E => new PropertyAndAttribute { Property = E, Attribute = E.GetCustomAttributes(typeof(ColumnMapAttribute), false).Cast<ColumnMapAttribute>().FirstOrDefault() })
+      .Where(E => E.Property.CanWrite && E.Property.CanRead && E.Attribute != null)
+      .Where(E => E.Property.PropertyType.IsBasicDataTypeOrNullable())
+      .Select(E =>
+      {
+        E.Attribute.PropertyName = E.Property.Name;
+        E.Attribute.TableColumnName = E.Attribute.TableColumnName ?? (E.Property.GetCustomAttribute<ColumnAttribute>()?.Name);
+        if (E.Property.PropertyType.IsNullableType()) E.Attribute.AllowNull = true;
+        E.Attribute.PropertyType = E.Property.PropertyType;
+        E.Attribute.DefaultValue = E.Attribute.DefaultValue ?? (E.Property.GetCustomAttribute<DefaultValueAttribute>()?.Value) ?? E.Property.PropertyType.DefaultBasicDataTypeValue();
+        if (E.Property.PropertyType.IsEnum)
+        {
+
+        }
+        return E;
+      })
+      .OrderBy(E => E.Attribute.TableColumnOrder);
+      }
+      if (InputType == null) return null;
+      else
+      {
+        DataExchangeCacheEntity Funct = null;
+        if (!DataExchangeEntities.TryGetValue(InputType, out Funct))
+        {
+          Funct = new DataExchangeCacheEntity();
+          DataExchangeEntities.Add(InputType, Funct);
+        }
+        if (Funct.Obj2Dict == null)
+        {
+          Funct.Attributes = Fetch();
+        }
+        return Funct.Attributes;
+      }
+
+    }
 
     [Obsolete("use Kits.FetchPropertiesAndAttributes instead", true)]
     public static IEnumerable<ColumnMapAttribute> FromModel<T>() => FromModel(typeof(T));
@@ -99,6 +145,12 @@
     //  return Table;
     //}
   }
+  public class PropertyAndAttribute
+  {
+    public PropertyInfo Property { get; set; }
+    public ColumnMapAttribute Attribute { get; set; }
+  }
+
   //DataTable <-> IEnumerable<T>
   public static partial class KatKits {
     internal class DataExchangeCacheEntity {
@@ -329,7 +381,7 @@
 
       var RowsProperty = typeof(DataTable).GetProperty(nameof(DataTable.Rows));
 
-      #region Inline Delegate
+#region Inline Delegate
       var InputParaType = Expression.Parameter(typeof(Type), "_Type");
       var InputParaTable = Expression.Parameter(typeof(DataTable), "Table");
       var TypedInputParaTable = Expression.Convert(InputParaTable, typeof(DataTable));
@@ -366,7 +418,7 @@
              Expression.Block(new[] { OutputVariable }, Body),
              InputParaTable, InputParaEnumable);
       var InlineFunc = LambdaExpression.Compile();
-      #endregion
+#endregion
       var DelegateIns = typeof(T).GetFields().FirstOrDefault(E => E.IsStatic && E.Name == nameof(GenericEnumerableToDataTable));
       DelegateIns.SetValue(null, InlineFunc);
 
@@ -470,4 +522,6 @@
 
   }
 
-}
+} 
+#endif  
+#endif

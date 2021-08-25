@@ -7,25 +7,8 @@
   using System.Text;
 
   //Type Check
-  public static partial class KatKits {
-    //public static DataTable ExcelToDataTable(FileInfo ExcelFile, string isHDR = "Yes")
-    //{
-    //  string conStr = "";
-    //  switch (ExcelFile.Extension)
-    //  {
-    //    case ".xls": //Excel 97-03
-    //      conStr = ConfigurationManager.ConnectionStrings["Excel03ConString"].ConnectionString;
-    //      break;
-    //    case ".xlsx": //Excel 07
-    //      conStr = ConfigurationManager.ConnectionStrings["Excel07ConString"].ConnectionString;
-    //      break;
-    //  }
-    //  conStr = String.Format(conStr, ExcelFile.FullName, isHDR);
-    //  OleDbConnection connExcel = new OleDbConnection(conStr);
-    //  OleDbCommand cmdExcel = new OleDbCommand();
-    //  OleDbDataAdapter oda = new OleDbDataAdapter();
-    //  DataTable dt = new DataTable();
-    //  cmdExcel.Connection = connExcel;
+  public static partial class KatKits
+  {
 
     //  //Get the name of First Sheet
     //  connExcel.Open();
@@ -117,6 +100,23 @@
     public static IEnumerable<PropertyInfo> FindIndexers(this Type This, string IndexName = "Item", params Type[] ParameterAndReturnTypes)
     => This.GetProperties()
         .Where(E => E.Name == IndexName && E.GetIndexParameters().Select(P => P.ParameterType).Append(E.PropertyType).OrderedEqual(ParameterAndReturnTypes));
+
+    public static object ConvertToDataType(string Text, Type Target)
+    {
+      if (string.IsNullOrEmpty(Text)) return Text;
+      if (Target.Equals(typeof(string))) return Text;
+      if (Target.IsNullableType()) Target = Nullable.GetUnderlyingType(Target);
+      if (Target.IsBasicDataType())
+      {
+        if (Target.IsPrimitive) return Convert.ChangeType(Text, Target);
+        else if (Target.Equals(typeof(decimal))) return decimal.Parse(Text);
+        else if (Target.Equals(typeof(DateTime))) return DateTime.Parse(Text);
+        else if (Target.Equals(typeof(TimeSpan))) return TimeSpan.Parse(Text);
+        else if (Target.Equals(typeof(Guid))) return Guid.Parse(Text);
+        else if (Target.Equals(typeof(DateTimeOffset))) return DateTimeOffset.Parse(Text);
+      }
+      throw new InvalidCastException($"cant convert string to {Target.Name}, basic data type(or nullable) Only");
+    }
 
   }
 }
