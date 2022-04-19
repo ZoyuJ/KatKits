@@ -4,7 +4,7 @@
   using System.Security.Cryptography;
   using System.Text;
 
-  public static partial class KatKits {
+  public static partial class Kits {
     public static string CRC64ISOHash(this byte[] Data) {
       return BitConverter.ToString(new CRC64_ISO().ComputeHash(Data));
     }

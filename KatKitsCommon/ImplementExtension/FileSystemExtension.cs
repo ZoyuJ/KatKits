@@ -1,4 +1,4 @@
-﻿namespace KatKits {
+﻿namespace KatKits.ImplementExtension {
   using System;
   using System.Collections;
   using System.Collections.Generic;
@@ -7,7 +7,7 @@
   using System.Text;
   using System.Threading.Tasks;
 
-  public static partial class KatKits {
+  public static partial class Kits {
     /// <summary>
     /// 移动文件
     /// </summary>
@@ -341,7 +341,7 @@
         Fs.Seek(-4, SeekOrigin.End);
         var BLts = new byte[4];
         Fs.Read(BLts, 0, 4);
-        var Rawlen = Convert.ToInt32(KatKits.Byte4ToInt32FromByteArray(BLts, 0));
+        var Rawlen = Convert.ToInt32(Kits.Byte4ToInt32FromByteArray(BLts, 0));
         var L = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(Rawlen) / 8.0));
         BLts = new byte[L];
         Fs.Seek(-(L + 4), SeekOrigin.End);
@@ -373,7 +373,7 @@
       private int WriteCachedMap(FileStream Fs, in BitArray Map, int RawMapLength) {
         var NormaledMapLen = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(RawMapLength) / 8.0));
         var WritedBts = new byte[4 + NormaledMapLen];
-        KatKits.Int32ToByte4InByteArray(RawMapLength, WritedBts, WritedBts.Length - 4);
+        Kits.Int32ToByte4InByteArray(RawMapLength, WritedBts, WritedBts.Length - 4);
         Map.CopyTo(WritedBts, 0);
         Fs.Seek(-WritedBts.Length, SeekOrigin.End);
         Fs.Write(WritedBts, 0, WritedBts.Length);

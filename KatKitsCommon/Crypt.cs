@@ -1,11 +1,13 @@
 ﻿namespace KatKits {
+  using global::KatKits.ImplementExtension.CollectionExtension;
+
   using System;
   using System.Collections.Generic;
   using System.IO;
   using System.Security.Cryptography;
   using System.Text;
 
- public static partial class KatKits{
+ public static partial class Kits{
     public static byte[] Decrypt(string PW, Stream Stream) {
       using (AesCryptoServiceProvider AES = new AesCryptoServiceProvider()) {
         AES.IV = GetIV(PW);

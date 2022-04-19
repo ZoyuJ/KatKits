@@ -9,17 +9,27 @@
     <Import_RootNamespace>KatKits</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)BytesAndBitOpeations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\BitWiseExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CRC.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Crypt.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataTableExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Enumerate.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EnumName.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)FileSys.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SQLClientExtension\Exceptions\DBAccessRollbackException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SQLClientExtension\MSSQLClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SQLClientExtension\SQLClientAbstruct.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StructedDataExtension\DataTableExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\CollectionExtension\CollectionGenericExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\CollectionExtension\CollectionImplementExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\CollectionExtension\SpecifiedEnumerableExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\EnumExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\FileSystemExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\ImplementExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\NumberExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StructedDataExtension\JsonExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StructedDataExtension\XLSAdapter\Adapters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StructedDataExtension\XLSAdapter\XLSExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)LinqExpressionExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Net.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SQLParametersExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Text2.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TypeExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\NetInterfaceExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SQLClientExtension\SQLParametersExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\StringExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RuntimeTypeExtension.cs" />
   </ItemGroup>
 </Project>

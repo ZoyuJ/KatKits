@@ -1,4 +1,4 @@
-﻿namespace KatKits {
+﻿namespace KatKits.ImplementExtension {
   using System;
   using System.Collections.Generic;
   using System.Linq;
@@ -7,7 +7,7 @@
   using System.Net.Sockets;
   using System.Text;
 
-  public static partial class KatKits {
+  public static partial class Kits {
     /// <summary>
     /// 查询所有IPEndPoint,
     /// 过滤：Enabled,EnableMulticast,InterfaceType==Ethernet,IPType==IPv4

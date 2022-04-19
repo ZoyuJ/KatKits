@@ -8,7 +8,7 @@
   using System.Text;
 
   //Expression Extension
-  public static partial class KatKits
+  public static partial class Kits
   {
     internal static Expression ForEach(Expression collection, ParameterExpression loopVar, Expression loopContent)
     {

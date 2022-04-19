@@ -1,9 +1,9 @@
-﻿namespace KatKits {
+﻿namespace KatKits.ImplementExtension {
   using System;
   using System.Collections.Generic;
   using System.Text;
 
-  public static partial class KatKits {
+  public static partial class Kits {
     private const int CharLimit = 0x9fa5 - 0x4e00 + 0x0039 - 0x0030 + 0x005a - 0x0041 + 0x007a - 0x0061 + 0x0004;
     private static readonly (int, int)[] Domians = new (int, int)[] { (0x0030, 0x0039), (0x0041, 0x005a), (0x0061, 0x007a), (0x4e00, 0x9fa5), };
     private static System.Random R = new System.Random(DateTime.UtcNow.Millisecond);
@@ -92,6 +92,23 @@
     public static Guid B642Guid(this string B64) => new Guid(Convert.FromBase64String(B64));
     public static string Guid2B642PathName(this Guid Guid) => Convert.ToBase64String(Guid.ToByteArray()).Replace('/', '-');
     public static Guid PathName2B642Guid(this string Name) => new Guid(Convert.FromBase64String(Name.Replace('-', '/')));
+
+    /// <summary>
+    /// take part of string from one part to another
+    /// </summary>
+    /// <param name="Source"></param>
+    /// <param name="From"></param>
+    /// <param name="To"></param>
+    /// <returns></returns>
+    public static string Take(this string Source, string From = null, string To = null) {
+      if (From == null && To == null) return Source;
+      var I1 = From == null ? -1 : Source.IndexOf(From);
+      var I2 = To == null ? -1 : Source.IndexOf(To);
+      if (I1 == -1 && I2 == -1) return Source;
+      if (I1 == -1 && I2 != -1) return Source.Substring(0, I2);
+      if (I1 != -1 && I2 == -1) return Source.Substring(I1 + From.Length, Source.Length - I1 - From.Length);
+      return Source.Substring(I1 + From.Length, I2 - I1 - From.Length);
+    }
 
   }
 }

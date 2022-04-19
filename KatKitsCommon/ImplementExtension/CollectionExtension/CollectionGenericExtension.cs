@@ -1,12 +1,37 @@
-﻿namespace KatKits {
+﻿namespace KatKits.ImplementExtension.CollectionExtension {
   using System;
   using System.Collections;
   using System.Collections.Generic;
   using System.Linq;
 
-  public static partial class KatKits {
-    public static void ForEach<T>(this T[] This, Action<T> Action) => Array.ForEach(This, Action);
+  public static partial class Kits {
+    /// <summary>
+    /// combine Array.ForEach List<T>.ForEach and foreach block together
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="Source"></param>
+    /// <param name="Action"></param>
+    public static void ForEach<T>(this IEnumerable<T> Source, Action<T> Action) {
+      switch (Source) {
+        case T[] A:
+        Array.ForEach(A, Action);
+        break;
+        case List<T> L:
+        L.ForEach(Action);
+        break;
+        default:
+        foreach (var item in Source) {
+          Action(item);
+        }
+        break;
+      }
 
+    }
+
+
+
+
+    [Obsolete("use skip-take instead")]
     public static IEnumerable<T> Split<T>(this IEnumerable<T> This, int Start, int Length) {
       int Index = -1;
       foreach (var item in This) {
@@ -14,15 +39,6 @@
         if (Index >= Start && Index - Start <= Length - 1) {
           yield return item;
         }
-      }
-    }
-
-    public static TV TryGetValue<TK, TV>(this Dictionary<TK, TV> This, TK Key) where TV : class {
-      if (This.TryGetValue(Key, out TV V)) {
-        return V;
-      }
-      else {
-        return null;
       }
     }
 
@@ -41,6 +57,7 @@
       yield break;
     }
 
+    #region Sort
     /// <summary>
     /// 自定义排序
     /// </summary>
@@ -59,6 +76,10 @@
         }
       }
     }
+
+    #endregion
+
+    #region Remove
     /// <summary>
     /// 选择移除
     /// </summary>
@@ -109,6 +130,9 @@
       }
       return null;
     }
+    #endregion
+
+
     /// <summary>
     /// 枚举一段数据
     /// </summary>
@@ -117,6 +141,7 @@
     /// <param name="StartIndex"></param>
     /// <param name="Length"></param>
     /// <returns></returns>
+    [Obsolete("use skip-take instead")]
     public static IEnumerable<T> ListSplit<T>(this IList<T> This, int StartIndex, int Length) {
       int Director = Length >> 31 | 1;
       Length = StartIndex + Math.Abs(Length);
@@ -143,12 +168,14 @@
       }
     }
 
+    [Obsolete("use Enumerable.Any instead")]
     public static bool And<T>(this IEnumerable<T> This, Func<T, bool> Field) {
       foreach (var item in This) {
         if (Field(item) == false) return false;
       }
       return true;
     }
+    [Obsolete("use Enumerable.Any instead")]
     public static bool? And<T>(this IEnumerable<T> This, Func<T, bool?> Field) {
       foreach (var item in This) {
         var Res = Field(item);
@@ -161,12 +188,14 @@
       }
       return true;
     }
+    [Obsolete("use Enumerable.Any instead")]
     public static bool Or<T>(this IEnumerable<T> This, Func<T, bool> Field) {
       foreach (var item in This) {
         if (Field(item)) return true;
       }
       return false;
     }
+    [Obsolete("use Enumerable.Any instead")]
     public static bool? Or<T>(this IEnumerable<T> This, Func<T, bool?> Field) {
       foreach (var item in This) {
         var Res = Field(item);
@@ -187,6 +216,7 @@
     /// <param name="This"></param>
     /// <param name="Field"></param>
     /// <returns></returns>
+    [Obsolete("use Enumerable.Any instead")]
     public static bool? IsUnity<T>(this IEnumerable<T> This, Func<T, bool?> Field) {
       bool? AllRes = null;
       foreach (var item in This) {
@@ -206,91 +236,10 @@
       return AllRes.Value;
     }
 
-    public static bool OrderedEqual<T>(this IEnumerable<T> This, IEnumerable<T> Others, int SourceOffset = 0, int OthersOffset = 0, int Length = 0, bool MatchLength = true) {
-      var _Source = Length == 0 ? This.Skip(SourceOffset) : This.Skip(SourceOffset).Take(Length);
-      var _Other = Length == 0 ? Others.Skip(OthersOffset) : Others.Skip(SourceOffset).Take(Length);
-      if (MatchLength && _Source.Count() != _Other.Count()) return false;
-      return !_Source.Zip(_Other, (L, R) => L.Equals(R)).Any(E => E == false);
-    }
+   
 
-    public static IEnumerable<uint> ReverseUIntRange(uint Start, uint Length) {
-      return new _ReverseUIntRange(Start, Length);
-    }
-    public static IEnumerable<uint> UIntRange(uint Start, uint Length) {
-      return new _UIntRange(Start, Length);
-    }
+ 
   }
-  public class _ReverseUIntRange : IEnumerable<uint>, IEnumerator<uint> {
-    public _ReverseUIntRange(uint Start, uint Length) {
-      this.Start = Start;
-      this.Length = Length;
-      Reset();
-    }
-    public IEnumerator<uint> GetEnumerator() {
-      return this;
-    }
 
-    IEnumerator IEnumerable.GetEnumerator() {
-      return this;
-    }
-
-
-    public uint Current { get; private set; }
-    public uint Start { get; private set; }
-    public uint Length { get; private set; }
-    private uint Step { get; set; } = 0;
-    public bool MoveNext() {
-      Step++;
-      Current = --Current;
-      return Current >= 0 && Step <= Length;
-    }
-
-    public void Reset() {
-      Current = Start;
-      Step = 0;
-    }
-
-    object IEnumerator.Current { get => Current; }
-
-    public void Dispose() {
-      Reset();
-    }
-  }
-  public class _UIntRange : IEnumerable<uint>, IEnumerator<uint> {
-    public _UIntRange(uint Start, uint Length) {
-      this.Start = Start;
-      this.Length = Length;
-      Reset();
-    }
-    public IEnumerator<uint> GetEnumerator() {
-      return this;
-    }
-
-    IEnumerator IEnumerable.GetEnumerator() {
-      return this;
-    }
-
-    public uint Current { get; private set; }
-    public uint Start { get; private set; }
-    public uint Length { get; private set; }
-    private uint Step { get; set; } = 0;
-
-    public bool MoveNext() {
-      Step++;
-      Current++;
-      return Step <= Length;
-    }
-
-    public void Reset() {
-      Current = Start - 1;
-      Step = 0;
-    }
-
-    object IEnumerator.Current { get => Current; }
-
-    public void Dispose() {
-      Reset();
-    }
-  }
 
 }

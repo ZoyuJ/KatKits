@@ -1,10 +1,10 @@
-﻿namespace KatKits {
+﻿namespace KatKits.ImplementExtension {
   using System;
   using System.Collections.Generic;
   using System.Net;
   using System.Text;
 
-public static partial class KatKits {
+public static partial class Kits {
     /// <summary>
     /// Int16转Bytex2,按书写顺序高位->高位，低位->低位
     /// </summary>

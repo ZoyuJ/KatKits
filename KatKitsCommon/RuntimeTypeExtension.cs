@@ -1,4 +1,6 @@
 ﻿namespace KatKits {
+  using global::KatKits.ImplementExtension.CollectionExtension;
+
   using System;
   using System.Collections.Generic;
   using System.Linq;
@@ -7,8 +9,7 @@
   using System.Text;
 
   //Type Check
-  public static partial class KatKits
-  {
+  public static partial class Kits {
 
     //  //Get the name of First Sheet
     //  connExcel.Open();
@@ -52,6 +53,12 @@
                                                 && (This.Name.StartsWith("<>") || This.Name.StartsWith("VB$"))
                                                 && This.Attributes.HasFlag(TypeAttributes.NotPublic);
     public static bool IsNullableType(this Type This) => Nullable.GetUnderlyingType(This) != null;
+    /// <summary>
+    /// can set null to member
+    /// </summary>
+    /// <param name="This"></param>
+    /// <returns></returns>
+    public static bool CanBeNull(this Type This) => typeof(string).Equals(This) || IsNullableType(This);
     public static bool IsBasicDataTypeOrNullable(this Type This) => IsBasicDataType(Nullable.GetUnderlyingType(This)) || IsBasicDataType(This);
     private static readonly Dictionary<Type, object> __DEFAULT_DATATYPE_VALUE = new Dictionary<Type, object>() {
       { typeof(bool),false},
@@ -88,8 +95,20 @@
       { typeof(Guid),Guid.Empty},
       { typeof(Guid?),new Guid?()},
     };
+    /// <summary>
+    /// get default value
+    /// </summary>
+    /// <param name="This"></param>
+    /// <returns></returns>
     public static object DefaultBasicDataTypeValue(this Type This) {
-      return This.IsEnum ? Enum.ToObject(This, (int)(Enum.GetValues(This).GetValue(0))) : __DEFAULT_DATATYPE_VALUE[This];
+      return This.IsEnum ? _DefaultEnumValue(This) : __DEFAULT_DATATYPE_VALUE[This];
+    }
+    internal static object _DefaultEnumValue(this Type This) {
+      var D = __DEFAULT_DATATYPE_VALUE[Enum.GetUnderlyingType(This)];
+      if (Enum.GetValues(This).Cast<object>().Select(E => Convert.ChangeType(E, Enum.GetUnderlyingType(This))).Any(E => E == D))
+        return Enum.ToObject(This, 0);
+      else
+        return Enum.ToObject(This, Enum.GetValues(This).GetValue(0));
     }
 
     //public static IEnumerable<PropertyInfo> FindIndexers(this Type This, params Type[] ParameterAndReturnTypes)
@@ -97,17 +116,28 @@
     //      .OfType<PropertyInfo>()
     //      .Where(E => E.GetIndexParameters().Select(P => P.ParameterType).Append(E.PropertyType).OrderedEqual(ParameterAndReturnTypes));
 
+    /// <summary>
+    /// find indexer from type
+    /// </summary>
+    /// <param name="This"></param>
+    /// <param name="IndexName"></param>
+    /// <param name="ParameterAndReturnTypes"></param>
+    /// <returns></returns>
     public static IEnumerable<PropertyInfo> FindIndexers(this Type This, string IndexName = "Item", params Type[] ParameterAndReturnTypes)
     => This.GetProperties()
         .Where(E => E.Name == IndexName && E.GetIndexParameters().Select(P => P.ParameterType).Append(E.PropertyType).OrderedEqual(ParameterAndReturnTypes));
 
-    public static object ConvertToDataType(string Text, Type Target)
-    {
+    /// <summary>
+    /// convert string to specified type(allow nullable type)
+    /// </summary>
+    /// <param name="Text"></param>
+    /// <param name="Target"></param>
+    /// <returns></returns>
+    public static object ConvertToDataType(string Text, Type Target) {
       if (string.IsNullOrEmpty(Text)) return Text;
       if (Target.Equals(typeof(string))) return Text;
       if (Target.IsNullableType()) Target = Nullable.GetUnderlyingType(Target);
-      if (Target.IsBasicDataType())
-      {
+      if (Target.IsBasicDataType()) {
         if (Target.IsPrimitive) return Convert.ChangeType(Text, Target);
         else if (Target.Equals(typeof(decimal))) return decimal.Parse(Text);
         else if (Target.Equals(typeof(DateTime))) return DateTime.Parse(Text);
@@ -116,6 +146,13 @@
         else if (Target.Equals(typeof(DateTimeOffset))) return DateTimeOffset.Parse(Text);
       }
       throw new InvalidCastException($"cant convert string to {Target.Name}, basic data type(or nullable) Only");
+    }
+
+    public static IEnumerable<Type> GetTypesInNameSpace(this Assembly assembly, string nameSpace) {
+      return
+        assembly.GetTypes()
+                .Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal))
+                .ToArray();
     }
 
   }
