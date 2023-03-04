@@ -1,37 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30711.63
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "KatKitsCommon", "KatKitsCommon\KatKitsCommon.shproj", "{4D582CF4-0CBA-4052-880D-4E5508FC9E1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KatKits.Framework", "KatKits.Framework\KatKits.Framework.csproj", "{87728733-7510-4F45-8108-50091EA4DE3B}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "KatKits.TS", "KatKits.TS\KatKits.TS.njsproj", "{F2B00E34-81C1-4CF2-8453-F15CCA10FB08}"
-EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "KatKits.TS.FileSliced", "KatKits.TS.FileSliced\KatKits.TS.FileSliced.njsproj", "{6A5A8175-BBE2-4B0A-B073-E876975F1790}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KatKits.Test", "KatKits.Test\KatKits.Test.csproj", "{0B2B9FF7-0D4B-4780-A5AF-DBF1ECBCF7D2}"
-EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "OtherGrid.TS", "OtherGrid.TS\OtherGrid.TS.njsproj", "{055E87E5-4B13-4E1D-9BE9-9AC035BE9995}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "OtherGrid", "OtherGrid\OtherGrid.shproj", "{E1F81567-641F-4F75-982F-5AA7B4ED8975}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KatKits", "KatKits\KatKits.csproj", "{69700C0D-E390-4B1C-8F99-F9B414146162}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "OtherCheckBoxGroup.TS", "OtherCheckBoxGroup.TS\OtherCheckBoxGroup.TS.njsproj", "{42F4AB8C-7346-4E14-90D5-166AB415DFEC}"
-EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "OtherRadioBoxGroup.TS", "OtherRadioBoxGroup.TS\OtherRadioBoxGroup.TS.njsproj", "{D5E4FDC2-0333-4C18-AA8E-F5408936471F}"
-EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "OtherUtil.TS", "OtherUtil.TS\OtherUtil.TS.njsproj", "{4FAA71DA-5130-4FBA-9197-D38F41A98239}"
-EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		KatKitsCommon\KatKitsCommon.projitems*{0b2b9ff7-0d4b-4780-a5af-dbf1ecbcf7d2}*SharedItemsImports = 5
-		KatKitsCommon\KatKitsCommon.projitems*{4d582cf4-0cba-4052-880d-4e5508fc9e1c}*SharedItemsImports = 13
-		KatKitsCommon\KatKitsCommon.projitems*{69700c0d-e390-4b1c-8f99-f9b414146162}*SharedItemsImports = 5
-		OtherGrid\OtherGrid.projitems*{e1f81567-641f-4f75-982f-5aa7b4ed8975}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -41,43 +21,25 @@ Global
 		{87728733-7510-4F45-8108-50091EA4DE3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87728733-7510-4F45-8108-50091EA4DE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87728733-7510-4F45-8108-50091EA4DE3B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F2B00E34-81C1-4CF2-8453-F15CCA10FB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2B00E34-81C1-4CF2-8453-F15CCA10FB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2B00E34-81C1-4CF2-8453-F15CCA10FB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2B00E34-81C1-4CF2-8453-F15CCA10FB08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A5A8175-BBE2-4B0A-B073-E876975F1790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A5A8175-BBE2-4B0A-B073-E876975F1790}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A5A8175-BBE2-4B0A-B073-E876975F1790}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A5A8175-BBE2-4B0A-B073-E876975F1790}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0B2B9FF7-0D4B-4780-A5AF-DBF1ECBCF7D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0B2B9FF7-0D4B-4780-A5AF-DBF1ECBCF7D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B2B9FF7-0D4B-4780-A5AF-DBF1ECBCF7D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B2B9FF7-0D4B-4780-A5AF-DBF1ECBCF7D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{055E87E5-4B13-4E1D-9BE9-9AC035BE9995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{055E87E5-4B13-4E1D-9BE9-9AC035BE9995}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{055E87E5-4B13-4E1D-9BE9-9AC035BE9995}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{055E87E5-4B13-4E1D-9BE9-9AC035BE9995}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69700C0D-E390-4B1C-8F99-F9B414146162}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{69700C0D-E390-4B1C-8F99-F9B414146162}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69700C0D-E390-4B1C-8F99-F9B414146162}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69700C0D-E390-4B1C-8F99-F9B414146162}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42F4AB8C-7346-4E14-90D5-166AB415DFEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42F4AB8C-7346-4E14-90D5-166AB415DFEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42F4AB8C-7346-4E14-90D5-166AB415DFEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42F4AB8C-7346-4E14-90D5-166AB415DFEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5E4FDC2-0333-4C18-AA8E-F5408936471F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5E4FDC2-0333-4C18-AA8E-F5408936471F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5E4FDC2-0333-4C18-AA8E-F5408936471F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5E4FDC2-0333-4C18-AA8E-F5408936471F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4FAA71DA-5130-4FBA-9197-D38F41A98239}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FAA71DA-5130-4FBA-9197-D38F41A98239}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4FAA71DA-5130-4FBA-9197-D38F41A98239}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4FAA71DA-5130-4FBA-9197-D38F41A98239}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E590E271-2B05-4B19-BA22-2B8BB90D647B}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		KatKitsCommon\KatKitsCommon.projitems*{0b2b9ff7-0d4b-4780-a5af-dbf1ecbcf7d2}*SharedItemsImports = 5
+		KatKitsCommon\KatKitsCommon.projitems*{4d582cf4-0cba-4052-880d-4e5508fc9e1c}*SharedItemsImports = 13
+		KatKitsCommon\KatKitsCommon.projitems*{69700c0d-e390-4b1c-8f99-f9b414146162}*SharedItemsImports = 5
+		KatKitsCommon\KatKitsCommon.projitems*{87728733-7510-4f45-8108-50091ea4de3b}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

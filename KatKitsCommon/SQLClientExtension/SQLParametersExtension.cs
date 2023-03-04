@@ -1,5 +1,5 @@
 ﻿#define MSSQL
-#define SQLITE
+//#define SQLITE
 
 namespace KatKits.SQLClientExtension {
   using System;
