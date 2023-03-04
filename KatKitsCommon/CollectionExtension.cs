@@ -44,7 +44,7 @@
             {
                 return V;
             }
-            else return default(TValue);
+            else return default;
         }
 
 
