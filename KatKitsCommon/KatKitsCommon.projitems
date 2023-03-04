@@ -9,27 +9,30 @@
     <Import_RootNamespace>KatKits</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\BitWiseExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ColumnMapAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CRC.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Crypt.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SQLClientExtension\Exceptions\DBAccessRollbackException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SQLClientExtension\MSSQLClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SQLClientExtension\SQLClientAbstruct.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StructedDataExtension\DataTableExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\CollectionExtension\CollectionGenericExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\CollectionExtension\CollectionImplementExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\CollectionExtension\SpecifiedEnumerableExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\EnumExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\FileSystemExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\ImplementExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\NumberExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StructedDataExtension\JsonExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StructedDataExtension\XLSAdapter\Adapters.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)StructedDataExtension\XLSAdapter\XLSExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)LinqExpressionExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\NetInterfaceExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SQLClientExtension\SQLParametersExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension\StringExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSVSupport\CSVColumn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSVSupport\CSVExpress.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSVSupport\CSVField.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSVSupport\CSVRow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSVSupport\CSVTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSVSupport\Exceptions\ColumnOutOfRangeException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSVSupport\Exceptions\CSVFieldWithUnknowDataTypeException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSVSupport\Exceptions\DamagedCSVFileException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DatatableExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DateRange.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CollectionExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EnumExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StringExtension.cs" />
+    <Compile Include="..\KatKitsCommon\DB\SQLServerDBAccess.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DB\DBAccessAbstract.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DB\DBAccessException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DB\QueryParamaterAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DateTimeExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImplementExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)JsonExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LinqExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RuntimeTypeExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StructuredDataExtension.cs" />
   </ItemGroup>
 </Project>
